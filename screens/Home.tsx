@@ -1,5 +1,6 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from "@expo/vector-icons"
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 
@@ -19,14 +20,16 @@ type SectionProps = {
     children: React.ReactNode;
 };
 
+
 const Home = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    
-    // Componente de card reutilizável
+    const handleNavigateToAnalise = () => {
+        navigation.navigate('Analise');
+    };
     const Card = ({ title, status = 'Não Respondido', emoji }: CardProps) => (
-        <TouchableOpacity 
+        <TouchableOpacity
             className="bg-white rounded-xl p-4 shadow-sm mr-3 min-w-[120px] max-w-[150px]"
-            style={{ 
+            style={{
                 elevation: 2,
                 display: 'flex',
                 justifyContent: 'space-between'
@@ -44,7 +47,6 @@ const Home = () => {
         </TouchableOpacity>
     );
 
-    // Componente de seção reutilizável
     const Section = ({ title, actionText = "Responder", children }: SectionProps) => (
         <View className="mb-6 w-full">
             <View className="flex-row justify-between items-center mb-3">
@@ -62,22 +64,22 @@ const Home = () => {
     return (
         <View className="flex-1 bg-blue-600">
             {/* Cabeçalho */}
-                <View className="flex justify-center items-start h-16 px-5 border-b border-white">
+            <View className="flex justify-center items-start h-16 px-5 border-b border-white">
                 <Text className="text-white text-lg font-medium">Início</Text>
-                </View>
+            </View>
 
             {/* Conteúdo principal com scroll */}
             <ScrollView className="flex-1 mt-4 px-5">
                 {/* Seção de Mapeamento de Riscos */}
                 <Section title="Mapeamento de Riscos">
-                    <Card 
-                        title="Seu emoji hoje" 
-                        status="Ansioso" 
-                        emoji="🤔" 
+                    <Card
+                        title="Seu emoji hoje"
+                        status="Ansioso"
+                        emoji="🤔"
                     />
-                    <Card 
-                        title="Como você se sente hoje" 
-                        status="Estressado" 
+                    <Card
+                        title="Como você se sente hoje"
+                        status="Estressado"
                     />
                 </Section>
 
@@ -104,28 +106,6 @@ const Home = () => {
                 {/* Espaço adicional no final para garantir que todo o conteúdo seja visível */}
                 <View className="h-4" />
             </ScrollView>
-
-            {/* Barra de navegação inferior */}
-            <View className="flex-row justify-around items-center py-3 bg-white">
-                <TouchableOpacity className="items-center">
-                    <Text className="text-2xl">🏠</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                                    className="items-center justify-center bg-cyan-400 rounded-full w-12 h-12 -mt-2"
-                                    style={{ elevation: 4 }}
-                                >
-                                    <Image 
-                                        source={require('../assets/you-softtek-u.png')} 
-                                        style={{ width: 24, height: 24 }} 
-                                        resizeMode="contain"
-                                    /></TouchableOpacity>
-                <TouchableOpacity 
-                    className="items-center"
-                    onPress={() => navigation.navigate('Analise')}
-                >
-                    <Text className="text-2xl">⚙️</Text>
-                </TouchableOpacity>
-            </View>
         </View>
     );
 };

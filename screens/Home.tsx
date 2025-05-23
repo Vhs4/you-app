@@ -26,7 +26,11 @@ const Home = () => {
     const Card = ({ title, status = 'Não Respondido', emoji }: CardProps) => (
         <TouchableOpacity 
             className="bg-white rounded-xl p-4 shadow-sm mr-3 min-w-[120px] max-w-[150px]"
-            style={{ elevation: 2 }}
+            style={{ 
+                elevation: 2,
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}
         >
             {emoji && (
                 <View className="mb-2">

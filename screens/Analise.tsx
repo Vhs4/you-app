@@ -34,7 +34,12 @@ const Analise = () => {
     const StatusCard = ({ title, status, statusColor = 'text-yellow-500', showValue = false, value = null }: StatusCardProps) => (
         <TouchableOpacity 
             className="bg-white bg-opacity-10 rounded-xl py-3 px-4 shadow-sm mr-3 min-w-[180px] max-w-[220px]"
-            style={{ borderColor: 'rgba(255,255,255,0.2)', borderWidth: 1 }}
+            style={{ 
+                borderColor: 'rgba(255,255,255,0.2)', 
+                borderWidth: 1,
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}
         >
             <Text className="text-white text-sm font-medium mb-2" numberOfLines={2}>{title}</Text>
             {showValue && value && (
@@ -43,9 +48,12 @@ const Analise = () => {
                     <Text className="text-white text-xs ml-1">(Zona de Alerta)</Text>
                 </View>
             )}
-            <Text className={`text-base font-bold ${statusColor}`}>
-                {status}
-            </Text>
+            {!showValue && (
+  <Text className={`text-base font-bold ${statusColor}`}>
+    {status}
+  </Text>
+)}
+
         </TouchableOpacity>
     );
 
@@ -53,7 +61,12 @@ const Analise = () => {
     const EmojiCard = ({ title, emoji, status, statusColor = 'text-yellow-500' }: EmojiCardProps) => (
         <TouchableOpacity 
             className="bg-white bg-opacity-10 rounded-xl py-3 px-4 shadow-sm mr-3 min-w-[180px] max-w-[220px]"
-            style={{ borderColor: 'rgba(255,255,255,0.2)', borderWidth: 1 }}
+            style={{ 
+                borderColor: 'rgba(255,255,255,0.2)', 
+                borderWidth: 1,
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}
         >
             <Text className="text-white text-sm font-medium mb-1">{title}</Text>
             <Text className="text-3xl mb-1">{emoji}</Text>

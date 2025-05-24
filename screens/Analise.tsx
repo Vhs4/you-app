@@ -2,7 +2,7 @@ import type React from "react"
 import { View, Text, TouchableOpacity, ScrollView, StatusBar } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import FloatingHelpButton from "../components/FloatingHelpButton"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { CheckinData } from "routes"
 
 type StatusCardProps = {
@@ -35,6 +35,7 @@ interface AnaliseProps {
 
 const Analise = ({ checkinData }: AnaliseProps) => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const insets = useSafeAreaInsets()
 
     // Função para determinar a cor baseada no sentimento
     const getSentimentColor = (feeling: string) => {
@@ -159,7 +160,13 @@ const Analise = ({ checkinData }: AnaliseProps) => {
                 </View>
             </View>
 
-            <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+            <ScrollView
+                className="flex-1 px-5"
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingBottom: 90 + Math.max(insets.bottom, 0), // Espaço para tab bar
+                }}
+            >
                 {/* Mapeamento de Riscos para o mês corrente */}
                 <View className="mb-6">
                     <Text className="text-white font-bold text-lg mb-3">Mapeamento de Riscos para o mês corrente</Text>
@@ -280,13 +287,7 @@ const Analise = ({ checkinData }: AnaliseProps) => {
                         </View>
                     </View>
                 </View>
-
-                {/* Espaço adicional no final */}
-                <View className="h-24" />
             </ScrollView>
-
-            {/* Floating Help Button */}
-            <FloatingHelpButton />
         </View>
     )
 }

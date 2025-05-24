@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView, StatusBar } from "react-nativ
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import type React from "react"
-import FloatingHelpButton from "../components/FloatingHelpButton"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { CheckinData } from "routes"
 
 type RootStackParamList = {
@@ -27,6 +27,7 @@ interface HomeProps {
 
 const Home = ({ checkinData }: HomeProps) => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const insets = useSafeAreaInsets()
 
     const handleNavigateToAnalise = () => {
         navigation.navigate("Analise")
@@ -88,7 +89,12 @@ const Home = ({ checkinData }: HomeProps) => {
             </View>
 
             {/* Conteúdo principal com scroll */}
-            <ScrollView className="flex-1 mt-4 px-5">
+            <ScrollView
+                className="flex-1 mt-4 px-5"
+                contentContainerStyle={{
+                    paddingBottom: 90 + Math.max(insets.bottom, 0), // Espaço para tab bar
+                }}
+            >
                 {/* Seção de Mapeamento de Riscos */}
                 <Section title="Mapeamento de Riscos">
                     <Card title="Seu emoji hoje" status={checkinData.emojiLabel} emoji={checkinData.emoji} />
@@ -114,13 +120,7 @@ const Home = ({ checkinData }: HomeProps) => {
                     <Card title="Relacionamento com seus colegas de trabalho" />
                     <Card title="Trabalho responde suas mensagens" />
                 </Section>
-
-                {/* Espaço adicional no final para garantir que todo o conteúdo seja visível */}
-                <View className="h-24" />
             </ScrollView>
-
-            {/* Floating Help Button */}
-            <FloatingHelpButton />
         </View>
     )
 }

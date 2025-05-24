@@ -1,38 +1,44 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from "@expo/vector-icons"
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react';
+import { View, Text, TouchableOpacity, ScrollView, StatusBar } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import type React from "react"
+import FloatingHelpButton from "../components/FloatingHelpButton"
+import { CheckinData } from "routes"
 
 type RootStackParamList = {
-    Analise: undefined;
-};
+    Analise: undefined
+}
 
 type CardProps = {
-    title: string;
-    status?: string;
-    emoji?: string;
-};
+    title: string
+    status?: string
+    emoji?: string
+}
 
 type SectionProps = {
-    title: string;
-    actionText?: string;
-    children: React.ReactNode;
-};
+    title: string
+    actionText?: string
+    children: React.ReactNode
+}
 
+interface HomeProps {
+    checkinData: CheckinData
+}
 
-const Home = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+const Home = ({ checkinData }: HomeProps) => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
     const handleNavigateToAnalise = () => {
-        navigation.navigate('Analise');
-    };
-    const Card = ({ title, status = 'Não Respondido', emoji }: CardProps) => (
+        navigation.navigate("Analise")
+    }
+
+    const Card = ({ title, status = "Não Respondido", emoji }: CardProps) => (
         <TouchableOpacity
             className="bg-white rounded-xl p-4 shadow-sm mr-3 min-w-[120px] max-w-[150px]"
             style={{
                 elevation: 2,
-                display: 'flex',
-                justifyContent: 'space-between'
+                display: "flex",
+                justifyContent: "space-between",
             }}
         >
             {emoji && (
@@ -40,12 +46,23 @@ const Home = () => {
                     <Text className="text-4xl">{emoji}</Text>
                 </View>
             )}
-            <Text className="text-blue-900 font-medium mb-2" numberOfLines={3}>{title}</Text>
-            <Text className={`text-xs ${status === 'Não Respondido' ? 'text-gray-500' : status === 'Ansioso' || status === 'Estressado' ? 'text-red-500' : 'text-blue-500'}`}>
+            <Text className="text-blue-900 font-medium mb-2" numberOfLines={3}>
+                {title}
+            </Text>
+            <Text
+                className={`text-xs ${status === "Não Respondido"
+                        ? "text-gray-500"
+                        : status === "Ansioso" || status === "Estressado" || status === "Preocupado"
+                            ? "text-red-500"
+                            : status === "Cansado"
+                                ? "text-orange-500"
+                                : "text-green-500"
+                    }`}
+            >
                 {status}
             </Text>
         </TouchableOpacity>
-    );
+    )
 
     const Section = ({ title, actionText = "Responder", children }: SectionProps) => (
         <View className="mb-6 w-full">
@@ -59,12 +76,14 @@ const Home = () => {
                 {children}
             </ScrollView>
         </View>
-    );
+    )
 
     return (
         <View className="flex-1 bg-blue-600">
+            <StatusBar barStyle="light-content" backgroundColor="#2563eb" />
+
             {/* Cabeçalho */}
-            <View className="flex justify-center items-start h-16 px-5 border-b border-white">
+            <View className="flex justify-center items-start h-16 px-5 border-b border-white/20">
                 <Text className="text-white text-lg font-medium">Início</Text>
             </View>
 
@@ -72,15 +91,8 @@ const Home = () => {
             <ScrollView className="flex-1 mt-4 px-5">
                 {/* Seção de Mapeamento de Riscos */}
                 <Section title="Mapeamento de Riscos">
-                    <Card
-                        title="Seu emoji hoje"
-                        status="Ansioso"
-                        emoji="🤔"
-                    />
-                    <Card
-                        title="Como você se sente hoje"
-                        status="Estressado"
-                    />
+                    <Card title="Seu emoji hoje" status={checkinData.emojiLabel} emoji={checkinData.emoji} />
+                    <Card title="Como você se sente hoje" status={checkinData.feeling} />
                 </Section>
 
                 {/* Seção de Fatores de Carga de Trabalho */}
@@ -104,10 +116,13 @@ const Home = () => {
                 </Section>
 
                 {/* Espaço adicional no final para garantir que todo o conteúdo seja visível */}
-                <View className="h-4" />
+                <View className="h-24" />
             </ScrollView>
-        </View>
-    );
-};
 
-export default Home;
+            {/* Floating Help Button */}
+            <FloatingHelpButton />
+        </View>
+    )
+}
+
+export default Home
